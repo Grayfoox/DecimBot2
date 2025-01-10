@@ -71,7 +71,7 @@ Please, go to the <#1314388851304955904> channel and select your roles. Don't fo
 
 ## Commands here ->
 # Show all available commands
-@client.command()
+@client.slash_command(name = "help", description = "writes help", guild_ids=decdi.GIDS)
 async def decimhelp(ctx):
     m = await ctx.send(HELP)
     await asyncio.sleep(10)
@@ -79,18 +79,9 @@ async def decimhelp(ctx):
     await ctx.message.delete()
     await m.delete()
 
-# debug command/trolling
-@client.command()
-async def say(ctx, *args):
-    if str(ctx.message.author) == 'SkavenLord58#0420':
-        await ctx.message.delete()
-        await ctx.send(f'{" ".join(args)}')
-    else:
-        print(f'{ctx.message.author} tried to use "say" command.')
-        # await ctx.message.delete()
 
 # poll creation, takes up to five arguments
-@client.command()
+@client.slash_command(name = "pool", description = "creates a pool for voting (max 5. options in args)", guild_ids=decdi.GIDS)
 async def poll(ctx, *args):
     poll_mess = f"Anketa: {args[0]}\n".replace("_", " ")
     m = await ctx.send("Creating poll... (If stuck, something failed horribly.)")
@@ -110,7 +101,7 @@ async def poll(ctx, *args):
     await m.edit(content=f"{poll_mess}")
 
 # rolls a dice
-@client.command()
+@client.slash_command(name = "roll", description = "roll a dice", guild_ids=decdi.GIDS)
 async def roll(ctx, arg_range=None):
     range = None
     try:
@@ -185,27 +176,36 @@ async def ping(ctx):
     pass
 
 
-@client.command()
+@client.slash_command(name = "yesorno", description = "Get an answer", guild_ids=decdi.GIDS)
 async def yesorno(ctx, *args):
     answers = ("Yes.", "No.", "Perhaps.", "Definitely yes.", "Definitely no.")
     await ctx.reply(f'{answers[random.randint(0, len(answers) - 1)]}')
     pass
 
+@client.slash_command(name = "gamer_call", description = "create a callout post for game role", guild_ids=decdi.GIDS)
+async def gamer_call(ctx, game: str = "finals", role="@&1242187454837035228", time: str = "20:30", option1: str = "World tour", option2: str = "Power Shift", option3: str = "rankedy"):
+    # automoderation
+    await ctx.message.delete()
+    # send z templaty
+    m = await ctx.send(GENERIC_CZ.replace('{0}', f'{role} {game} {time} {option1} {option2} {option3}'))
+    # přidání reakcí
+    await batch_react(m, ["✅", "❎", "🤔", "1️⃣", "2️⃣", "3️⃣", "❓"])
+    pass
 
-@client.command()
-async def warcraft(ctx, *args):
+@client.slash_command(name = "warcraft", description = "create a callout post for W3 gaming", guild_ids=decdi.GIDS)
+async def warcraft(ctx, time: str = "20:30"):
     # automoderation
     await ctx.message.delete()
     # send z templaty
     if args:
-        m = await ctx.send(WARCRAFTY_CZ.replace('{0}', f' v cca {args[0]}'))
+        m = await ctx.send(WARCRAFTY_CZ.replace('{0}', f' v cca {time}'))
     else:
         m = await ctx.send(WARCRAFTY_CZ.replace('{0}', ''))
     # přidání reakcí
     await batch_react(m, ["✅", "❎", "🤔", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "❓"])
     pass
 
-@client.command()
+@client.slash_command(name = "wowko", description = "create a callout post for Wowko", guild_ids=decdi.GIDS)
 async def wowko(ctx, *args):
     # automoderation
     await ctx.message.delete()
@@ -219,32 +219,19 @@ async def wowko(ctx, *args):
     pass
 
 
-@client.command()
-async def gmod(ctx, *args):
+@client.slash_command(name = "gmod", description = "create a callout post for garrys mod", guild_ids=decdi.GIDS)
+async def gmod(ctx,  time: str = "20:30"):
     # automoderation
     await ctx.message.delete()
     # send z templaty
     if args:
-        m = await ctx.send(GMOD_CZ.replace('{0}', f' v cca {args[0]}'))
+        m = await ctx.send(GMOD_CZ.replace('{0}', f' v cca {time}'))
     else:
         m = await ctx.send(GMOD_CZ.replace('{0}', ''))
     # přidání reakcí
     await batch_react(m, ["✅", "❎", "🤔", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "❓"])
     pass
 
-@client.command()
-async def today(ctx):
-    async with aiohttp.ClientSession() as session:
-        async with session.get('https://national-api-day.herokuapp.com/api/today') as response:
-            payload = await response.json()
-            holidays: List[str] = payload.get("holidays", [])
-            await ctx.reply(f'Today are following holiday: {", ".join(holidays)}')
-    pass
-
-@client.command()
-async def fetchrole(ctx):
-    roles = await ctx.guild.fetch_roles()
-    await ctx.send(roles)
 
 @client.slash_command(name = "createrolewindow", description = "Posts a role picker window.", guild_ids=decdi.GIDS)
 @commands.default_member_permissions(administrator=True)
@@ -345,26 +332,8 @@ async def listener(ctx: disnake.MessageInteraction):
     else:
         pass
 
-@client.command()
-async def cat(ctx, *args):
-    try:
-        if args.__len__() >= 2:
-            w = args[0]
-            h = args[1]
-        else:
-            w = random.randint(64,640)
-            h = random.randint(64,640)
-        apiCall = requests.get(f"https://placekitten.com/{w}/{h}")
-        if apiCall.status_code == 200:
-            await ctx.send(f"https://placekitten.com/{w}/{h}")
-        else:
-            await ctx.send("Oh nyo?!?! Something went ^w^ wwong?!!")
-        pass
-    except Exception as exc:
-        print(f"Encountered exception:\n {exc}")
-        await ctx.send("Oh nyo?!?! Something went ^w^ wwong?!!")
 
-@client.command()
+@client.slash_command(name = "fox", description = "gets a fox", guild_ids=decdi.GIDS)
 async def fox(ctx):
     try:
         apiCall = requests.get("https://randomfox.ca/floof/")
@@ -376,8 +345,8 @@ async def fox(ctx):
         print(f"Caught exception:\n {exc}")
     pass
 
-@client.command()
-async def waifu(ctx, *args):
+@client.slash_command(name = "waifu", description = "gets a waifu", guild_ids=decdi.GIDS)
+async def waifu(ctx, waifu: str = "neko", type: str = "sfw" ):
     try:
         if args and args[0] in ["sfw", "nsfw"]:
             if args[1]:
@@ -401,7 +370,7 @@ async def autostat(ctx):
     await m.reply("OK;")
 
 # sends an xkcd comics
-@client.command()
+@client.slash_command(name = "xkdc", description = "gets a xdcd comix", guild_ids=decdi.GIDS)
 async def xkcd(ctx, *args):
     if args:
         x = requests.get('https://xkcd.com/' + args[0] + '/info.0.json')
@@ -422,7 +391,7 @@ async def on_message(m: Message):
     elif m.content[0] == PREFIX:
         # nutnost aby jely commandy    
         await UnfilteredBot.process_commands(client, m)
-    elif str(m.author) != "DecimBOT 2.0#8467":
+    elif random.randint(0, 4) == 2 and str(m.author) != "DecimBOT 2.0#8467":
         if "negr" in m.content.lower():
             await m.add_reaction("🇳")
             # await m.add_reaction("🇪")
@@ -439,10 +408,8 @@ async def on_message(m: Message):
             await m.add_reaction("🥶")
             await m.add_reaction("💦")
         if "windows" in m.content.lower():
-            if random.randint(0, 4) == 2:
                 await m.add_reaction("😔")
         if "debian" in m.content.lower():
-            if random.randint(0, 4) == 2:
                 await m.add_reaction("💜")
         if "všechno nejlepší" in m.content.lower():
             await m.add_reaction("🥳")

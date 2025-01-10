@@ -1,22 +1,22 @@
 HELP = '''
     ***Bot commands:***
     _arguments in \{\} are optional, arguments with \[\] are required_
-    $_bothelp_ or _commands_
+    //_bothelp_ or _commands_
         Shows help.
-    $_ping_
+    //_ping_
         Shows bot's ping and API latency.
-    $_roll_ \{number\}
+    //_roll_ \{number\}
         Rolls a random number between 1 and \{number\}. Defaults number to 100,
         if not specified.
-    $_yesorno_
+    //_yesorno_
         Answers a question with yes or no.
-    $_warcraft_ \{time\}
+    //_warcraft_ \{time\}
         Creates a warcraft play session announcement from template.
-    $_gmod_ \{time\}
+    //_gmod_ \{time\}
         Creates a gmod play session announcement from template.
-    $_poll_ [name_of_poll] [option_1] [option2] \{option3\} \{option4\} \{option5\}
+    //_poll_ [name_of_poll] [option_1] [option2] \{option3\} \{option4\} \{option5\}
         Use underscores as spaces. Bot will automatically edit them for you.
-    $_today_
+    //_today_
         Tells you which international day it is today.
     '''
 
@@ -31,7 +31,7 @@ Chceme hrát:
 :one: - Survival Chaos
 :two: - Legion TD nebo Element TD
 :three: - Blood Tournament
-:four: - Risk
+:four: - Tower survive
 :five: - Luckery/Uther Party/Temple Escape
 :six: - Objevovat nové mapy.
 :question: - Něco jiného? Napište jako reply.
@@ -70,6 +70,21 @@ GMOD_CZ = '''
     :three: - Stranded (RPG mapa, něco jako Rust)
     :four: - DropZone (arena s různýma spellama něco jako Warloci ve W3)
     :five: - Flood
+    :question: - Něco jiného? Napište jako reply.
+
+'''
+
+GENERIC_CZ = '''
+<{0}> - {1} dnes {2}?
+    React with attendance:
+    :white_check_mark: Ano
+    :negative_squared_cross_mark: Ne
+    :thinking: Možná
+
+    Chceme hrát:
+    {2}
+    {3}
+    {4}
     :question: - Něco jiného? Napište jako reply.
 
 '''
